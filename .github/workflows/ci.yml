@@ -1,0 +1,29 @@
+name: Housing Regression CI
+
+on:
+  push:
+    branches:
+      - main
+      - reg_branch
+      - hyper_branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.13.5
+
+      - name: Install Dependencies
+        run: |
+          pip install --no-cache-dir -r requirements.txt
+
+      - name: Run Regression Script
+        if: github.ref == 'refs/heads/reg_branch' || github.ref == 'refs/heads/hyper_branch'
+        run: |
+          python regression.py
